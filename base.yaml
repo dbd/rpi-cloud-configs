@@ -1,0 +1,31 @@
+#cloud-config
+hostname: nomad-01
+manage_etc_hosts: false
+package_update: true
+package_upgrade: true
+users:
+  - name: dbd
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    groups: users,sudo
+    ssh_pwauth: false
+    chpasswd: { expire: false }
+    lock_passwd: false
+write_files:
+  - content: |
+      ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnhstiKSvx9cimzBZx5poqIcHh47cR/xthuDtwEkIzJ1LSlhWyGlrFgYD5vHB0mgIM/2Ur/vn7dPAh8538tEAms/S3wMmmVYKA3mf8Fr6oDIM5Kqe8AA1eh+k5j8tftsS31jXyvXRs8PCMIfjqZd4/MkVFfQ5Ib4gp0FIQ6HOhRz2/g5MnTDfkoFYsl2I2oLl5ruzYfvxxon4nNeLHuEupQKbHfOKIviU7f4OvHagLxBHOrynoIFPn8sMhMZ6X+sPtyScc8MBZTZUjS5teDXEtEkRkUbRC0wA6dY72K72x3X3KnjWq5ECnu+RsODdwRdQePHqA5CmC+9aQnUfCZ9xJ
+    path: /etc/ssh/ca.pub
+  - content: |
+      PermitRootLogin yes
+      UsePAM yes
+      X11Forwarding no
+      PrintMotd no
+      AcceptEnv LANG LC_*
+      TrustedUserCAKeys /etc/ssh/ca.pub
+      PasswordAuthentication no
+    path: /etc/ssh/sshd_config
+packages:
+ - vim
+ - tmux
+ - htop
+
